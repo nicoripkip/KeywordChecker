@@ -3,6 +3,9 @@ from database.database import DatabaseConnection
 from flask import Flask, render_template, render_template_string, request, Blueprint
 from config import DevelopmentConfig
 
+from google.ads.googleads.client import GoogleAdsClient
+client = GoogleAdsClient.load_from_storage("");
+
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = DevelopmentConfig.SECRET_KEY
