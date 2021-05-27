@@ -4,6 +4,26 @@ body {
 }
 
 .search-container {
-    margin-top: 40px;
-    text-align: center;
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.search-bar {
+    width: 85% !important;
+}
+
+.search-header-container {
+    padding-left: 15% !important;
+    padding-left: 15% !important;
+}
+
+.search-link-item {
+    color: blue;
+}
+
+.search-bar-confirm-btn {
+    color: blue !important;
+    margin: 1px solid blue;
 }

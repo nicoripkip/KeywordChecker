@@ -2,13 +2,16 @@ import os
 from database.database import DatabaseConnection
 from flask import Flask, render_template, render_template_string, request, Blueprint
 from config import DevelopmentConfig
-
 from google.ads.googleads.client import GoogleAdsClient
-client = GoogleAdsClient.load_from_storage("");
+# from google.ads.googleads.error import GoogleAdsException
+from google.api_core import protobuf_helpers
+client = GoogleAdsClient.load_from_storage("./google-ads.yaml");
 
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = DevelopmentConfig.SECRET_KEY
+GOOGLE_ADS_SERVICE = "GoogleAdsService"
+_DEFAULT_PAGE_SIZE = 1000
 
 
 #
@@ -22,9 +25,29 @@ def index():
 #
 # Methode om de 
 #
-@app.route("/noun", methods=["POST", "GET"])
-def noun_results():
-    return render_template("noun.html")
+@app.route("/noun/<query>", methods=["POST", "GET"])
+def noun_results(query):
+    service = client.get_service(GOOGLE_ADS_SERVICE)
+
+    if query == "":
+        raise Exception("Geen sleutelwoord ingevoerd!")
+
+    api_query = """SELECT 
+                        ad_group.id, 
+                        ad_group_criterion.type, 
+                        ad_group_criterion.criterion_id, 
+                        ad_group_criterion.keyword.text, 
+                        ad_group_criterion.keyword.match_type
+                    FROM ad_group_criterion
+                    WHERE ad_group_criterion.type = """ + query
+    
+    request = client.get_type("SearchGoogleAdsRequest")
+    request.query = api_query
+    request.page_size = _DEFAULT_PAGE_SIZE
+
+    results = service.search(request=request)
+
+    return render_template("noun.html", words=results)
 
 
 #
@@ -47,4 +70,4 @@ def conjuction_results():
 # Methode
 #
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=DevelopmentConfig.DEBUG)
