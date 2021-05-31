@@ -1,4 +1,5 @@
 import os
+from re import template
 from database.database import DatabaseConnection
 from flask import Flask, render_template, render_template_string, request, Blueprint
 from config import DevelopmentConfig
@@ -25,11 +26,14 @@ def index():
 #
 # Methode om de 
 #
-@app.route("/noun/<query>", methods=["POST", "GET"])
-def noun_results(query):
+@app.route("/noun", methods=["POST", "GET"])
+def noun_results():
+    from flask import request
+
+    # if request.method == "post":
     service = client.get_service(GOOGLE_ADS_SERVICE)
 
-    if query == "":
+    if request.form.get("search") == "":
         raise Exception("Geen sleutelwoord ingevoerd!")
 
     api_query = """SELECT 
@@ -39,7 +43,7 @@ def noun_results(query):
                         ad_group_criterion.keyword.text, 
                         ad_group_criterion.keyword.match_type
                     FROM ad_group_criterion
-                    WHERE ad_group_criterion.type = """ + query
+                    WHERE ad_group_criterion.type = """ + request.form.get("search")
     
     request = client.get_type("SearchGoogleAdsRequest")
     request.query = api_query
@@ -49,11 +53,13 @@ def noun_results(query):
 
     return render_template("noun.html", words=results)
 
+    return render_template("noun.html")
+
 
 #
 # Methode vraagwoorden toe te voegen
 #
-@app.route('/question', methods=['GET'])
+@app.route('/question', methods=['GET', 'POST'])
 def question_results():
     return render_template("question.html");
 
@@ -61,9 +67,20 @@ def question_results():
 #
 # Methode om de voegwoorden pagina op te halen
 #
-@app.route('/conjuction', methods=['GET'])
+@app.route('/conjuction', methods=['GET', 'POST'])
 def conjuction_results():
+    if request.method == "POST":
+        return render_template("conjuction.html")
+
     return render_template("conjuction.html")
+
+
+#
+# Methode om de zoek volume pagina op te halen
+#
+@app.route('/volumes', methods=['GET'])
+def search_volume():
+    pass
 
 
 #

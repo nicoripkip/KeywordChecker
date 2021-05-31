@@ -11,13 +11,55 @@
 
     <body>
         <div class="container-fluid">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light search-header-container">
                 <a class="navbar-brand" href="#">SleutelwoordZoeker</a>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link search-link-item" href="/" style="color: blue;">Sleutelwoorden zoeken</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link search-link-item" href="#" style="color: blue;">Zoek volume</a>
+                        </li>
+                    </ul>
+                </div>
             </nav>
 
             <div class="row">
                 <div class="col-md-2"></div>
-                <div class="col-md-8 search-container"></div>
+                <div class="col-md-2"></div>
+                <div class="col-md-6 search-result-container">
+                    <div class="search-result-header-container">
+                        <ul class="search-result-unlisted-list">
+                            <li class="search-result-listed-list">
+                                <a href="#" class="search-result-navigation-item search-result-active">Sleutelwoorden</a>
+                            </li>
+
+                            <li class="search-result-listed-list">
+                                <a href="#" class="search-result-navigation-item">Vraagwoorden</a>
+                            </li>
+
+                            <li class="search-result-listed-list">
+                                <a href="#" class="search-result-navigation-item">Voegwoorden</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="search-result-body-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Sleutelwoorden</td>
+                                    <td>Zoek volumes</td>
+                                    <td>CPC</td>
+                                    <td>Competitie</td>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div> 
+                </div>
                 <div class="col-md-2"></div>
             </div>
         </div>
