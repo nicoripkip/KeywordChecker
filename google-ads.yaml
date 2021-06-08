@@ -7,7 +7,7 @@
 developer_token: A1VNzFZP602EaUOi4N0bSg
 client_id: 465971410197-m6aq11olb9qpb0rjb6mq6dn4pueo58nv.apps.googleusercontent.com
 client_secret: vpfIzGbuG1H5A1Uf3O54Qltp
-refresh_token: 1//09pCRYh-rFXpfCgYIARAAGAkSNwF-L9IrC_lVu0Nz5f8vyXWzGmKRKVrveCnEuksYAgbqztE0U-WXXukDkpU2FRY5PyPx2kX0iXw
+refresh_token: 1//09nbYDgnZeWQACgYIARAAGAkSNwF-L9IrLw5IGK0Xt_C4BRrcojLRW0CrUp2NSLmy1BN-YynAQNxUVd4_3plDqrZGLsVvx92kNRw
 
 # Login customer ID configuration
 ###############################################################################
@@ -17,7 +17,7 @@ refresh_token: 1//09pCRYh-rFXpfCgYIARAAGAkSNwF-L9IrC_lVu0Nz5f8vyXWzGmKRKVrveCnEu
 # instead of 123-456-7890. You can also specify this later in code if your    #
 # application uses multiple manager account + OAuth pairs.                    #
 ###############################################################################
-login_customer_id: 9330579517
+login_customer_id: 2803307352
 
 # Service Account configuration
 ###############################################################################

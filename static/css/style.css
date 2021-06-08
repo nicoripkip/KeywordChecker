@@ -69,3 +69,34 @@ body {
 .search-result-body-container {
     border-top: 1px solid black
 }
+
+
+.login-container {
+    position: absolute !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* border: 1px solid black; */
+    height: 500px;
+}
+
+.login-middle-container {
+    border: 1px solid black;
+    border-radius: 5%;
+    padding: 10px;
+}
+
+.login-container-header {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.login-container-header h1 {
+    color: blue;
+}
+
+.btn-login {
+    color: #ffffff !important;
+    background-color: blue !important;
+}

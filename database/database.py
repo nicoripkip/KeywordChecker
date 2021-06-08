@@ -1,5 +1,9 @@
 from sqlalchemy import create_engine
-from sqlalchemy.sql.expression import table
+from sqlalchemy import Table
+from sqlalchemy import MetaData
+from sqlalchemy import select
+from sqlalchemy.sql.schema import Column
+
 
 #
 # Class Database
@@ -22,7 +26,7 @@ class DatabaseConnection(object):
     # Methode voor het maken van de verbinding
     #
     def connect_database(self):
-        self.engine = create_engine("mysql://")
+        return create_engine("mysql+pymysql://niko:henkdepotvis@127.0.0.1/keywordchecker?charset=utf8mb4")
 
 
     #
@@ -43,10 +47,16 @@ class DatabaseConnection(object):
     # Methode voor het ophalen van gegevens
     #
     def get(self, params=[]):
-        self.query = "SELECT * FROM " + self.table_name
+        self.query = select(self.table_name)
         
         if params != []:
             self.query.replace("*", ", ".join(params), 1)
+
+
+    def where(self, param1, param2):
+        self.query = select(self.table_name).where(param1 == param2)
+
+        print(self.query)
 
 
     #
@@ -81,16 +91,5 @@ class DatabaseConnection(object):
     # Methode voor het uitvoeren van de query
     #
     def execute(self):
-        with self.engine.connect() as connection:
-            connection.execute(self.query)
-
-
-#
-# Registratie van verschillende static functies
-#
-DatabaseConnection.execute = staticmethod(DatabaseConnection.execute)
-DatabaseConnection.table = staticmethod(DatabaseConnection.table)
-DatabaseConnection.get = staticmethod(DatabaseConnection.get)
-DatabaseConnection.insert = staticmethod(DatabaseConnection.insert)
-DatabaseConnection.update = staticmethod(DatabaseConnection.update)
-DatabaseConnection.delete = staticmethod(DatabaseConnection.delete)
+        connection = self.connect_database()
+        return connection.execute(self.query).fetchall()
