@@ -4,10 +4,10 @@
 # recommended OAuth2 flow. For more information on authenticating with OAuth2 #
 # see: https://developers.google.com/google-ads/api/docs/oauth/overview       #
 ###############################################################################
-developer_token: A1VNzFZP602EaUOi4N0bSg
-client_id: 465971410197-m6aq11olb9qpb0rjb6mq6dn4pueo58nv.apps.googleusercontent.com
-client_secret: vpfIzGbuG1H5A1Uf3O54Qltp
-refresh_token: 1//09nbYDgnZeWQACgYIARAAGAkSNwF-L9IrLw5IGK0Xt_C4BRrcojLRW0CrUp2NSLmy1BN-YynAQNxUVd4_3plDqrZGLsVvx92kNRw
+developer_token: 
+client_id: 694250419303-l02u7nhj771o4gmngf8nmmhck0tscq05.apps.googleusercontent.com
+client_secret: sg5_ATS30OU_oBCEpLcRBnYa
+refresh_token: 1//091uK2Kv2BcTUCgYIARAAGAkSNwF-L9IrYf9jbomqXXy0PHXosyKQANuYYnwmihAx_pqtJTKjjU3-NnvoaNVoffI5cDUveSNjS5c
 
 # Login customer ID configuration
 ###############################################################################
@@ -17,7 +17,7 @@ refresh_token: 1//09nbYDgnZeWQACgYIARAAGAkSNwF-L9IrLw5IGK0Xt_C4BRrcojLRW0CrUp2NS
 # instead of 123-456-7890. You can also specify this later in code if your    #
 # application uses multiple manager account + OAuth pairs.                    #
 ###############################################################################
-login_customer_id: 2803307352
+login_customer_id: 2636830962
 
 # Service Account configuration
 ###############################################################################

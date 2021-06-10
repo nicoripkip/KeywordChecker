@@ -1,6 +1,10 @@
+from http.client import responses
 import os
 from re import template
+from werkzeug.wrappers import response
 
+from werkzeug.wrappers.response import Response
+from library.client import RestClient
 from werkzeug.utils import redirect
 from database.database import DatabaseConnection
 from flask import Flask, render_template, render_template_string, request, Blueprint, session
@@ -20,21 +24,35 @@ GOOGLE_ADS_SERVICE = "GoogleAdsService"
 _DEFAULT_PAGE_SIZE = 1000
 
 
+
+#
+# Credentials api
+#
+CRED_USERNAME = "nikovanommen.nvo@gmail.com"
+CRED_PASSWORD = "ac6b5942fae1ce72"
+
+
 #
 # Methode voor het ophalen van de index pagina
 #
 @app.route("/", methods=["GET"])
-def index():
-    service = client.get_service("GoogleAdsService")
- 
-    print(service)
+def index(): 
+    languages = get_online_data(
+        "/v3/keywords_data/google/languages",
+        {
+            0: CRED_USERNAME,
+            1: CRED_PASSWORD
+        }
+    )
+
+    languages = languages["tasks"][0]["result"]
 
     username = ""
 
-    if session['username'] != "":
-        username = session['username']
+    # if session['username'] != "":
+    #     username = session['username']
 
-    return render_template("home.html", username=username)
+    return render_template("home.html", username=username, languages=languages)
 
 
 #
@@ -44,33 +62,43 @@ def index():
 def noun_results():
     from flask import request
 
-    # if request.method == "post":
-    service = client.get_service(GOOGLE_ADS_SERVICE)
+    if request.method == "GET":
+        post_online_data(
+            "/v3/keywords_data/google/keywords_for_keywords/task_post",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            },
+            [
+                dict(
+                    language_code=request.form.get("language"),
+                    location_code=2840,
+                    keywords=[
+                        request.form.get("search")
+                    ],
+                    pingback_url="http://127.0.0.1:5000/noun"
+                ),
+            ]
+        )
 
-    if request.form.get("search") == "":
-        raise Exception("Geen sleutelwoord ingevoerd!")
+        words = get_many_online_data(
+            "/v3/keywords_data/google/keywords_for_keywords/tasks_ready",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            }
+        )
 
-    api_query = """SELECT 
-                        ad_group.id, 
-                        ad_group_criterion.type, 
-                        ad_group_criterion.criterion_id, 
-                        ad_group_criterion.keyword.text, 
-                        ad_group_criterion.keyword.match_type
-                    FROM ad_group_criterion
-                    WHERE ad_group_criterion.type = """ + request.form.get("search")
-    
-    request = client.get_type("SearchGoogleAdsRequest")
-    request.query = api_query
-    request.page_size = _DEFAULT_PAGE_SIZE
-
-    results = service.search(request=request)
+        words = words[0]["tasks"][0]["result"]
+    else:
+        words = []
 
     username = ""
 
-    if session['username'] != "":
-        username = session['username']
+    # if session["username"] != "":
+    #     username = session["username"]
 
-    return render_template("noun.html", words=results, username=username)
+    return render_template("noun.html", words=words, username=username)
 
 
 #
@@ -100,6 +128,9 @@ def search_volume():
     pass
 
 
+#
+#
+#
 @app.route('/login', methods=["GET"])
 def login():
     username = ""
@@ -111,6 +142,9 @@ def login():
     return render_template("login.html", username=username)
 
 
+#
+#
+#
 @app.route('/login_check', methods=["POST"])
 def login_check():
     if request.form.get("username") != "" and request.form.get("password") != "":
@@ -131,12 +165,63 @@ def login_check():
     return redirect('/login')
 
 
+#
+#
+#
 @app.route('/logout', methods=["get"])
 def logout():
     session['username'] = ""
     session['password'] = ""
 
     return redirect("/")
+
+
+#
+# Methode voor het ophalen van online data
+#
+def get_online_data(url, credentials, payload=dict()):
+    client = RestClient(credentials[0], credentials[1])
+    response = client.get(url)
+
+    if response["status_code"] == 20000:
+        return response
+
+    raise Exception("Er is geen data opgehaald")
+
+
+#
+# Methode wanneer er meerdere taken gedaan moeten worden
+#
+def get_many_online_data(url, credentials, payload=dict()):
+    client = RestClient(credentials[0], credentials[1])
+    response = client.get(url)
+
+    if response["status_code"] == 20000:
+        result = []
+
+        for x in response["tasks"]:
+            if x["result"] and len(x["result"]) > 0:
+                for y in x["result"]:
+                    print(y)
+
+                    result.append(client.get(y["endpoint"]))            
+    
+        return result
+    
+    raise Exception("Er is geen data opgehaalt")
+
+
+#
+# Methode om data naar de api te werken
+# 
+def post_online_data(url, credentials, payload=dict()):
+    client = RestClient(credentials[0], credentials[1])
+    response = client.post(url, payload)
+
+    if response["status_code"] == 20000:
+        return response
+
+    raise Exception("Data is niet naar de api verzonden: %s", (response["status_code"], response["status_message"]))
 
 
 #

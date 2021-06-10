@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Table
 from sqlalchemy import MetaData
 from sqlalchemy import select
+from sqlalchemy.sql.elements import Null
 from sqlalchemy.sql.schema import Column
 
 
@@ -18,7 +19,7 @@ class DatabaseConnection(object):
         self.username = username
         self.password = password
         self.engine = None
-        self.query = ""
+        self.query = Null
         self.table_name = ""
 
     
@@ -54,7 +55,7 @@ class DatabaseConnection(object):
 
 
     def where(self, param1, param2):
-        self.query = select(self.table_name).where(param1 == param2)
+        self.query.where(param1 == param2)
 
         print(self.query)
 
