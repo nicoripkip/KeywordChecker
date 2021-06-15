@@ -16,7 +16,9 @@ class User(object):
         self.table_name = table
         self.metadata = MetaData();
 
-
+    #
+    # Create a table
+    #
     def table(self):
         return Table(
             self.table_name, 

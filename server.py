@@ -1,8 +1,8 @@
 from http.client import responses
 import os
 from re import template
+from sqlalchemy.sql.ddl import CreateColumn
 from werkzeug.wrappers import response
-
 from werkzeug.wrappers.response import Response
 from library.client import RestClient
 from werkzeug.utils import redirect
@@ -10,10 +10,10 @@ from database.database import DatabaseConnection
 from flask import Flask, render_template, render_template_string, request, Blueprint, session
 from config import DevelopmentConfig
 from google.ads.googleads.client import GoogleAdsClient
-# from google.ads.googleads.error import GoogleAdsException
 from database.models.user_model import User
 from google.api_core import protobuf_helpers
-from flask import sessions
+from library.authentication import Authentication
+import uuid
 client = GoogleAdsClient.load_from_storage("./google-ads.yaml");
 
 
@@ -22,7 +22,6 @@ app = Flask(__name__, template_folder="templates")
 app.secret_key = DevelopmentConfig.SECRET_KEY
 GOOGLE_ADS_SERVICE = "GoogleAdsService"
 _DEFAULT_PAGE_SIZE = 1000
-
 
 
 #
@@ -37,6 +36,8 @@ CRED_PASSWORD = "ac6b5942fae1ce72"
 #
 @app.route("/", methods=["GET"])
 def index(): 
+    Authentication.register
+
     languages = get_online_data(
         "/v3/keywords_data/google/languages",
         {
@@ -49,8 +50,8 @@ def index():
 
     username = ""
 
-    # if session['username'] != "":
-    #     username = session['username']
+    if "username" in session:
+        username = session['username']
 
     return render_template("home.html", username=username, languages=languages)
 
@@ -95,8 +96,8 @@ def noun_results():
 
     username = ""
 
-    # if session["username"] != "":
-    #     username = session["username"]
+    if "username" in session:
+        username = session["username"]
 
     return render_template("noun.html", words=words, username=username)
 
@@ -106,7 +107,24 @@ def noun_results():
 #
 @app.route('/question', methods=['GET', 'POST'])
 def question_results():
-    return render_template("question.html");
+
+    if request.method == "GET":
+        words = get_many_online_data(
+            "/v3/keywords_data/google/keywords_for_keywords/tasks_ready",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            }
+        )
+
+        words = words[0]["tasks"][0]["result"]
+    else:
+        words = []
+
+    if "username" in session:
+        username = session["username"]
+
+    return render_template("question.html", words=words, username=username);
 
 
 #
@@ -114,8 +132,21 @@ def question_results():
 #
 @app.route('/conjuction', methods=['GET', 'POST'])
 def conjuction_results():
-    if request.method == "POST":
-        return render_template("conjuction.html")
+    if request.method == "GET":
+        words = get_many_online_data(
+            "/v3/keywords_data/google/keywords_for_keywords/tasks_ready",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            }
+        )
+
+        words = words[0]["tasks"][0]["result"]
+    else:
+        words = []
+    
+    if "username" in session:
+        username = session["username"]
 
     return render_template("conjuction.html")
 
@@ -135,7 +166,7 @@ def search_volume():
 def login():
     username = ""
 
-    if session['username'] != "":
+    if "username" in session:
         username = session['username']
         return redirect("/")
     
@@ -153,12 +184,15 @@ def login_check():
 
         connection = DatabaseConnection("127.0.0.1", "keywordchecker", "nikoripkip", "henkdepotvis")
         connection.table(user)
+        connection.get()
+        connection.where(user.c.username, request.form.get("username"))
         connection.where(user.c.password, request.form.get("password"))
         results = connection.execute()
 
         if len(results) > 0:
             session['username'] = results[0][1]
             session['password'] = results[0][2]
+            session['login_key'] = uuid.uuid4()
 
             return redirect("/")
         
@@ -170,8 +204,9 @@ def login_check():
 #
 @app.route('/logout', methods=["get"])
 def logout():
-    session['username'] = ""
-    session['password'] = ""
+    del session['username']
+    del session['password']
+    del session['login_key']        
 
     return redirect("/")
 

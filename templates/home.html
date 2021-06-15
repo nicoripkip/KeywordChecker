@@ -17,7 +17,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link search-link-item" href="#" style="color: blue;">Sleutelwoorden zoeken</a>
+                            <a class="nav-link search-link-item" href="/" style="color: blue;">Sleutelwoorden zoeken</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link search-link-item" href="#" style="color: blue;">Zoek volume</a>
@@ -41,21 +41,20 @@
                 <div class="col-md-6 search-container">
                     <form action="/noun" method="POST">
                         <div class="row">
-                            <div class="col-md-9 search-col">
+                            <div class="col-md-12 search-col">
                                 <div class="input-group">
-                                    <input type="text" name="search" class="form-control search-bar" placeholder="Zoeken.." aria-describedby="basic-addon" />
                                     <div class="input-group-append">
-                                        <select class="input-group-text search-language-select" name="language" id="basic-addon">
+                                        <select class="input-group-text search-language-select" name="language" id="select-addon">
                                             {% for x in languages %}       
-                                                <option value="{{ x["language_code"] }}">{{ x["language_name"] }}</option>
+                                                <option value="{{ x["language_code"] }}" {% if x["language_code"] == "nl" %} selected {% endif %} >{{ x["language_name"] }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
+                                    <input type="text" name="search" class="form-control search-bar" placeholder="Zoeken.." aria-describedby="select-addon search-addon" />
+                                    <div class="input-group-append">
+                                        <input type="submit" name="submit" class="btn btn-block search-bar-confirm-btn" value="Zoeken" />
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-md-3 search-col">
-                                <input type="submit" name="submit" class="btn btn-block search-bar-confirm-btn" value="Zoeken" />
                             </div>
                         </div>
                     </form>

@@ -55,7 +55,7 @@ class DatabaseConnection(object):
 
 
     def where(self, param1, param2):
-        self.query.where(param1 == param2)
+        self.query = self.query.where(param1 == param2)
 
         print(self.query)
 

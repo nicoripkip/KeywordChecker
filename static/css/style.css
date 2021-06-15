@@ -3,38 +3,55 @@ body {
     padding: 0px;
 }
 
+body div {
+    box-sizing: content-box !important;
+}
+
+.navbar-brand {
+    font-size: 1.55rem !important;
+}
+
+.nav-link {
+    font-size: 1.2rem !important;
+    color: #01346F !important;
+}
+
 .search-container {
     position: absolute !important;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .search-bar {
     /* width: 100% !important; */
+    height: calc(1.5em + 1.55rem + 2px) !important;
 }
 
 .search-header-container {
     padding-left: 15% !important;
     padding-right: 15% !important;
+    margin-left: 0% !important;
+    margin-right: 0% !important;
 }
 
 .search-link-item {
-    color: blue;
+    color: #01346F;
 }
 
 .search-bar-confirm-btn {
-    color: blue !important;
-    border: 1px solid blue !important;
+    color: #01346F !important;
+    border: 1px solid #01346F !important;
 }
 
 .search-col {
-    margin: 0px;
-    padding: 0px;
+    margin: 0px !important;
+    padding: 0px !important;
 }
 
 .search-language-option {
-    color: blue;
+    color: #01346F;
 }
 
 
@@ -52,7 +69,7 @@ body {
 }
 
 .search-result-navigation-item {
-    color: blue;
+    color: #01346F;
     text-decoration: none;
     padding-bottom: 5px;
     border-bottom: 1px solid black;
@@ -64,6 +81,10 @@ body {
     border-right: 1px solid black;
     border-bottom: 0px;
     padding: 5px;
+}
+
+.result-search-container {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .search-result-body-container {
@@ -81,7 +102,7 @@ body {
 }
 
 .login-middle-container {
-    border: 1px solid black;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 5%;
     padding: 10px;
 }
@@ -93,20 +114,55 @@ body {
 }
 
 .login-container-header h1 {
-    color: blue;
+    color: #01346F;
+    font-size: 2.95rem;
+    font-weight: 200 !important;
+}
+
+.search-login-icon {
+    width: 60px !important;
+    text-align: center !important;
+}
+
+.search-login-icon i {
+    text-align: center !important;
+    margin-left: 10px;
+    color: #01346F;
+}
+
+.search-login-form-item {
+    height: calc(1.5em + 1.35rem + 2px) !important;
 }
 
 .btn-login {
     color: #ffffff !important;
-    background-color: blue !important;
+    background-color: #01D486 !important;
+}
+
+.btn-login:hover{
+    color: #fff;
+    background-color: #01346F !important;
+}
+
+
+.search-result-filter-header {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.search-result-filter-header-title {
+    color: #01346F;
+    font-weight: 200;
+    text-align: center;
 }
 
 .search-result-filter-container {
     width: 100%;
     height: 300px;
-    border: 1px solid #000;
     border-radius: 5%;
     margin-top: 98px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
 }
 
 .search-result-filter-container div div {

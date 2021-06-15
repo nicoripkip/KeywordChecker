@@ -6,7 +6,7 @@
 
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
         <!-- CSS only -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">  
     </head>
 
     <body>
@@ -17,7 +17,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link search-link-item" href="#" style="color: blue;">Sleutelwoorden zoeken</a>
+                            <a class="nav-link search-link-item" href="/" style="color: blue;">Sleutelwoorden zoeken</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link search-link-item" href="#" style="color: blue;">Zoek volume</a>
@@ -37,14 +37,34 @@
             </nav>
 
             <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-2">
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
                     <div class="search-result-filter-container">
                         <div class="row">
                             <div class="col-md-12">
+                                <div class="search-result-filter-header">
+                                    <h2 class="search-result-filter-header-title">Filter</h2>
+                                </div>
+
                                 <div class="form-group">
                                     <label class="form-text">Specifiek woord:</label>
-                                    <input type="text" name="word" class="form-control" />
+                                    <input type="text" name="word" id="filter-word" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-text">Zoekvolumes: </label>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" id="min-volume-append">MIN</label>
+                                        </div>
+                                        <input type="number" name="min_volume" class="form-control" aria-describedby="min-volume-append" />
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" id="max-volume-append">MAX</label>
+                                        </div>
+                                        <input type="number" name="min_volume" class="form-control" aria-describedby="max-volume-append" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -68,7 +88,7 @@
                     </div>
 
                     <div class="search-result-body-container">
-                        <table class="table">
+                        <table class="table" id="table_id">
                             <thead>
                                 <tr>
                                     <td>#</td>
@@ -79,7 +99,7 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="result-table-tbody">
                                 {% for x in words %}
                                     <tr>
                                         <td>#</td>
@@ -96,5 +116,10 @@
                 <div class="col-md-2"></div>
             </div>
         </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+        <script src="{{ url_for('static', filename='js/style.js') }}"></script>
     </body>
 </html>
