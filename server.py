@@ -13,6 +13,7 @@ from google.ads.googleads.client import GoogleAdsClient
 from database.models.user_model import User
 from google.api_core import protobuf_helpers
 from library.authentication import Authentication
+from library.downloads import Downloads
 import uuid
 client = GoogleAdsClient.load_from_storage("./google-ads.yaml");
 
@@ -63,7 +64,9 @@ def index():
 def noun_results():
     from flask import request
 
-    if request.method == "GET":
+    if request.method == "POST":
+        words = []
+
         post_online_data(
             "/v3/keywords_data/google/keywords_for_keywords/task_post",
             {
@@ -148,7 +151,7 @@ def conjuction_results():
     if "username" in session:
         username = session["username"]
 
-    return render_template("conjuction.html")
+    return render_template("conjuction.html", words=words, username=username)
 
 
 #
@@ -257,6 +260,20 @@ def post_online_data(url, credentials, payload=dict()):
         return response
 
     raise Exception("Data is niet naar de api verzonden: %s", (response["status_code"], response["status_message"]))
+
+
+#
+# Methode om vraagwoorden te filteren
+#
+def filter_questions(dataset):
+    pass
+
+
+#
+# Methode om confunctons te filteren
+#
+def filter_conjunctions(dataset):
+    pass
 
 
 #

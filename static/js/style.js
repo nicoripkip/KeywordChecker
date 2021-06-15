@@ -54,3 +54,73 @@ $('#table_id').DataTable({
         "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Dutch.json",
     },
 });
+
+
+let download_excel = document.getElementById('download-excel');
+let download_csv = document.getElementById('download-csv');
+let download_txt = document.getElementById('download-txt');
+
+download_excel.onclick = () => {
+    $("#table_id").table2excel({
+        name: 'dataset',
+        filename: 'dataset',
+        fileext: 'xlsx'
+    })
+}
+
+download_csv.onclick = () => {
+    let csv = export_table_to_csv();
+
+    file = new Blob([csv], { 
+        type: "text/csv",
+    });
+
+    download_csv.href = window.URL.createObjectURL(file);
+
+    download_csv.click();
+}
+
+download_txt.onclick = () => {
+    let txt = export_table_to_csv();
+
+    file = new Blob([csv], {
+        type: 'text/txt',
+    });
+
+    download_txt.href = window.URL.createObjectURL(file);
+
+    download_txt.click();
+}
+
+
+function export_table_to_csv() {
+    let csv = [];
+    let head = document.querySelector("table thead tr");
+    let body = document.querySelector("table tbody tr");
+
+    console.log(head);
+
+    for (let i = 0; i < head.parentNode.children.length; i++) {
+        let row = [];
+        let cols = head.parentNode.children[i].querySelectorAll("td");
+        
+        console.log(i);
+
+        for (let j = 0; j < cols.length; j++) {
+            row.push(cols[j].innerText);
+        }
+        csv.push(row.join(", "))
+    }
+
+    for (let i = 0; i < body.parentNode.children.length; i++) {
+        let row = [];
+        let cols = body.parentNode.children[i].querySelectorAll("td");
+        
+        for (let j = 0; j < cols.length; j++) {
+            row.push(cols[j].innerText);
+        }
+        csv.push(row.join(", "))
+    }
+
+    return csv;
+}

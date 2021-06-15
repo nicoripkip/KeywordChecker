@@ -37,14 +37,16 @@
             </nav>
 
             <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-3">
+                <div class="col-md-2"></div>
+                <div class="col-md-3 column-filter">
                     <div class="search-result-filter-container">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="search-result-filter-header">
                                     <h2 class="search-result-filter-header-title">Filter</h2>
                                 </div>
+
+                                <br>
 
                                 <div class="form-group">
                                     <label class="form-text">Specifiek woord:</label>
@@ -53,20 +55,52 @@
 
                                 <div class="form-group">
                                     <label class="form-text">Zoekvolumes: </label>
-                                    <div class="input-group">
+                                    <div class="input-group search-result-filter-volume-container">
                                         <div class="input-group-append">
                                             <label class="input-group-text" id="min-volume-append">MIN</label>
                                         </div>
-                                        <input type="number" name="min_volume" class="form-control" aria-describedby="min-volume-append" />
+                                        <input type="number" name="min_volume" class="search-result-filter-form-volume" aria-describedby="min-volume-append" />
                                     </div>
-                                    <div class="input-group">
+                                    <div class="input-group search-result-filter-volume-container">
                                         <div class="input-group-append">
                                             <label class="input-group-text" id="max-volume-append">MAX</label>
                                         </div>
-                                        <input type="number" name="min_volume" class="form-control" aria-describedby="max-volume-append" />
+                                        <input type="number" name="min_volume" class="search-result-filter-form-volume" aria-describedby="max-volume-append" />
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label class="form-text">CPC: </label>
+                                    <input type="number" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-text">Competitie: </label>
+                                    <input type="number" class="form-control" />
+                                </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="search-result-download-container">
+                        <div class="search-result-download-header">
+                            <h2 class="search-result-download-header-title">Download</h2>
+                        </div>
+
+                        <br>
+                        <br>
+
+                        <div class="form-group search-result-download-option">
+                            <label class="form-text">Excel: </label>
+                            <a href="#" class="search-result-download-link" id="download-excel">Download</a>
+                        </div>
+                        <div class="form-group search-result-download-option">
+                            <label class="form-text">CSV: </label>
+                            <a href="#" class="search-result-download-link" id="download-csv">Download</a>
+                        </div>
+                        <div class="form-group search-result-download-option">
+                            <label class="form-text">Tekstbestand: </label>
+                            <a href="#" class="search-result-download-link" id="download-txt">Download</a>
                         </div>
                     </div>
                 </div>
@@ -113,11 +147,12 @@
                         </table>
                     </div> 
                 </div>
-                <div class="col-md-2"></div>
+                <div class="col-md-1"></div>
             </div>
         </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
         <script src="{{ url_for('static', filename='js/style.js') }}"></script>
