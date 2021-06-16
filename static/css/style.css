@@ -7,6 +7,10 @@ body div {
     /* box-sizing: content-box !important; */
 }
 
+.bg-light {
+    background-color: #e3e7ef !important;
+}
+
 .navbar-brand {
     font-size: 1.55rem !important;
 }

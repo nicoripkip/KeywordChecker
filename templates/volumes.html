@@ -38,46 +38,40 @@
 
             <div class="row">
                 <div class="col-md-3"></div>
-                <div class="col-md-6 login-container">
-                    <form action="/login_check" method="POST">
+                <div class="col-md-6 search-container">
+                    <form action="/volumes_result" method="POST">
                         <div class="row">
-                            <div class="col-md-4"></div>
-                            <div class="col-md-4 login-middle-container">
-                                <div class="login-container-header">
-                                    <h1>Inloggen</h1>
-                                </div>
-
-                                <br>
-                                <br>
-                                <br>
-                                <br>
-
-                                <div class="input-group">
-                                    <div class="input-group-append">
-                                        <label class="input-group-text search-login-icon" id="gn-append">
-                                            <i class="far fa-user"></i>
-                                        </label>
-                                    </div>
-                                    <input type="text" name="username" class="form-control search-login-form-item" placeholder="Gebruikersnaam" aria-describedby="gn-append" />
-                                </div>
-
-                                <br>
-
-                                <div class="input-group">
-                                    <div class="input-group-append">
-                                        <label class="input-group-text search-login-icon" id="ww-append"><i class="fas fa-key"></i></label>
-                                    </div>
-                                    <input type="password" name="password" class="form-control search-login-form-item" placeholder="Wachtwoord" aria-describedby="ww-append" />
-                                </div>
-
-                                <br>
-                                <br>
-
+                            <div class="col-md-12 search-col">
                                 <div class="form-group">
-                                    <input type="submit" name="submit" class="btn btn-large btn-block btn-login" value="Submit" />
+                                    <textarea name="volumes" class="form-control" rows="15"></textarea>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <select name=language" class="form-control" id="search-volumes-lang">
+                                                {% for x in languages %}
+                                                    <option value="{{ x["language_code"] }}" {% if x["language_code"] == "nl" %} selected {% endif %}>{{ x["language_name"] }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <select name=locations" class="form-control" id="search-volumes-loc">
+                                                <!-- {% for x in locations %}
+                                                    <option value="{{ x["location_code"] }}" >{{ x["location_name"] }}</option>
+                                                {% endfor %} -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 0px;">
+                                    <input type="submit" name="submit" class="btn btn-block search-bar-confirm-btn" value="Zoeken" />
                                 </div>
                             </div>
-                            <div class="col-md-4"></div>
                         </div>
                     </form>
                 </div>
@@ -87,6 +81,5 @@
 
         <!-- JavaScript Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
-        <script src="https://kit.fontawesome.com/2098348b1b.js"></script>
     </body>
 </html>

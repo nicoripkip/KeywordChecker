@@ -1,13 +1,15 @@
 from http.client import responses
 import os
 from re import template
+import re
+from flask.json import tag
 from sqlalchemy.sql.ddl import CreateColumn
 from werkzeug.wrappers import response
 from werkzeug.wrappers.response import Response
 from library.client import RestClient
 from werkzeug.utils import redirect
 from database.database import DatabaseConnection
-from flask import Flask, render_template, render_template_string, request, Blueprint, session
+from flask import Flask, render_template, render_template_string, request, Blueprint, session, jsonify
 from config import DevelopmentConfig
 from google.ads.googleads.client import GoogleAdsClient
 from database.models.user_model import User
@@ -86,19 +88,26 @@ def noun_results():
             ]
         )
 
-        words = []
-
-        words = get_many_online_data(
-            "/v3/keywords_data/google/keywords_for_keywords/tasks_ready",
+        post_online_data(
+            "/v3/keywords_data/google/search_volume/task_post",
             {
                 0: CRED_USERNAME,
                 1: CRED_PASSWORD
-            }
+            },
+            [
+                dict(
+                    language_code=request.form.get("language"),
+                    location_code=2840,
+                    keywords=[
+                        request.form.get("search")
+                    ],
+                    pingback_url="http://127.0.0.1:5000/noun"
+                ),
+            ]
         )
 
+        return redirect("/noun")
 
-        if len(words) != 0:
-            words = words[0]["tasks"][0]["result"]
     elif request.method == "GET":
         words = []
 
@@ -110,8 +119,24 @@ def noun_results():
             }
         )
 
+        volume = get_many_online_data(
+            "/v3/keywords_data/google/search_volume/tasks_ready",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            }
+        )
+
         if len(words) != 0:
             words = words[0]["tasks"][0]["result"]
+
+            if len(volume) != 0:
+                words.insert(0, volume[0]["tasks"][0]["result"][0])
+            else:
+                return redirect("/noun")
+            #words = filter_keyword(words[0]["tasks"][0]["result"], request.form.get("search"))
+        else:
+            return redirect("/noun")
     else:
         words = []
 
@@ -182,7 +207,91 @@ def conjuction_results():
 #
 @app.route('/volumes', methods=['GET'])
 def search_volume():
-    pass
+    languages = get_online_data(
+        "/v3/keywords_data/google/languages",
+        {
+            0: CRED_USERNAME,
+            1: CRED_PASSWORD
+        }
+    )
+    languages = languages["tasks"][0]["result"]
+
+    locations = get_online_data(
+        "/v3/keywords_data/google/locations",
+        {
+            0: CRED_USERNAME,
+            1: CRED_PASSWORD
+        }
+    )
+    locations = locations["tasks"][0]["result"]
+    
+    if "username" in session:
+        username = session["username"]
+
+    return render_template("volumes.html", languages=languages, locations=locations, username=username)
+
+
+#
+# Methode om de search volumes op te vangen
+#
+@app.route('/volumes_result', methods=["GET", "POST"])
+def volumes_result():
+    if request.method == "POST":
+        words = []
+        keywords = request.form.get("volumes").split()
+        dicts = []
+
+        for x in keywords:
+            dicts.append(
+                dict(
+                    language_code=request.form.get("language"),
+                    location_code=2840,
+                    keywords=[
+                        x
+                    ],
+                    pingback_url="http://127.0.0.1:5000/volumes_result"
+                )
+            )
+
+        print(dicts)
+
+        post_online_data(
+            "/v3/keywords_data/google/search_volume/task_post",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            },
+            [
+                dict(
+                    language_code=request.form.get("language"),
+                    location_code=2840,
+                    keywords=keywords,
+                    pingback_url="http://127.0.0.1:5000/volumes_result"
+                )
+            ]
+        )
+
+        return redirect("/volumes_result")
+
+    elif request.method == "GET":
+        words = get_many_online_data(
+            "/v3/keywords_data/google/search_volume/tasks_ready",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            }
+        )
+
+        if len(words) != 0:
+            words = words[0]["tasks"][0]["result"]
+        else:
+            return redirect("/volumes_result")
+
+
+    if "username" in session:
+        username = session["username"]
+
+    return render_template("result.html", username=username, words=words)
 
 
 #
@@ -283,6 +392,19 @@ def post_online_data(url, credentials, payload=dict()):
         return response
 
     raise Exception("Data is niet naar de api verzonden: %s", (response["status_code"], response["status_message"]))
+
+
+#
+# Methode om het juiste word te filteren
+#
+def filter_keyword(dataset, keyword):
+    array = list()
+
+    for x in dataset:
+        if keyword in x["keyword"].strip():
+            array.append(x)
+
+    return array
 
 
 #
