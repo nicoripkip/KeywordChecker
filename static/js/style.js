@@ -83,7 +83,7 @@ download_csv.onclick = () => {
 download_txt.onclick = () => {
     let txt = export_table_to_csv();
 
-    file = new Blob([csv], {
+    file = new Blob([txt], {
         type: 'text/txt',
     });
 

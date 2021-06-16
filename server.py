@@ -15,7 +15,8 @@ from google.api_core import protobuf_helpers
 from library.authentication import Authentication
 from library.downloads import Downloads
 import uuid
-client = GoogleAdsClient.load_from_storage("./google-ads.yaml");
+import time
+#client = GoogleAdsClient.load_from_storage("./google-ads.yaml");
 
 
 
@@ -85,6 +86,8 @@ def noun_results():
             ]
         )
 
+        words = []
+
         words = get_many_online_data(
             "/v3/keywords_data/google/keywords_for_keywords/tasks_ready",
             {
@@ -93,7 +96,22 @@ def noun_results():
             }
         )
 
-        words = words[0]["tasks"][0]["result"]
+
+        if len(words) != 0:
+            words = words[0]["tasks"][0]["result"]
+    elif request.method == "GET":
+        words = []
+
+        words = get_many_online_data(
+            "/v3/keywords_data/google/keywords_for_keywords/tasks_ready",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            }
+        )
+
+        if len(words) != 0:
+            words = words[0]["tasks"][0]["result"]
     else:
         words = []
 
@@ -110,8 +128,9 @@ def noun_results():
 #
 @app.route('/question', methods=['GET', 'POST'])
 def question_results():
-
     if request.method == "GET":
+        words = []
+
         words = get_many_online_data(
             "/v3/keywords_data/google/keywords_for_keywords/tasks_ready",
             {
@@ -120,22 +139,25 @@ def question_results():
             }
         )
 
-        words = words[0]["tasks"][0]["result"]
+        if len(words) != 0:
+            words = words[0]["tasks"][0]["result"]
     else:
         words = []
 
     if "username" in session:
         username = session["username"]
 
-    return render_template("question.html", words=words, username=username);
+    return render_template("question.html", words=words, username=username)
 
 
 #
 # Methode om de voegwoorden pagina op te halen
 #
-@app.route('/conjuction', methods=['GET', 'POST'])
+@app.route('/conjunction', methods=['GET', 'POST'])
 def conjuction_results():
     if request.method == "GET":
+        words = []
+
         words = get_many_online_data(
             "/v3/keywords_data/google/keywords_for_keywords/tasks_ready",
             {
@@ -144,7 +166,8 @@ def conjuction_results():
             }
         )
 
-        words = words[0]["tasks"][0]["result"]
+        if len(words) != 0:
+            words = words[0]["tasks"][0]["result"]
     else:
         words = []
     

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Sleutelwoord zoeker</title>
+
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+        <!-- CSS only -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">  
+    </head>
+
+    <body>
+        <div class="container-fluid">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light search-header-container">
+                <a class="navbar-brand" href="/">SleutelwoordZoeker</a>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link search-link-item" href="/" style="color: blue;">Sleutelwoorden zoeken</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link search-link-item" href="#" style="color: blue;">Zoek volume</a>
+                        </li>
+                    </ul>
+
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            {% if username == "" %}
+                                <a class="nav-link" style="color: blue;" href="/login">Login</a>
+                            {% else %}
+                                <a class="nav-link" style="color: blue;" href="/logout">{{ username }}</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-3 column-filter">
+                    <div class="search-result-filter-container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="search-result-filter-header">
+                                    <h2 class="search-result-filter-header-title">Filter</h2>
+                                </div>
+
+                                <br>
+
+                                <div class="form-group">
+                                    <label class="form-text">Specifiek woord:</label>
+                                    <input type="text" name="word" id="filter-word" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-text">Zoekvolumes: </label>
+                                    <div class="input-group search-result-filter-volume-container">
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" id="min-volume-append">MIN</label>
+                                        </div>
+                                        <input type="number" name="min_volume" class="search-result-filter-form-volume" aria-describedby="min-volume-append" />
+                                    </div>
+                                    <div class="input-group search-result-filter-volume-container">
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" id="max-volume-append">MAX</label>
+                                        </div>
+                                        <input type="number" name="min_volume" class="search-result-filter-form-volume" aria-describedby="max-volume-append" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-text">CPC: </label>
+                                    <input type="number" class="form-control" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-text">Competitie: </label>
+                                    <input type="number" class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="search-result-download-container">
+                        <div class="search-result-download-header">
+                            <h2 class="search-result-download-header-title">Download</h2>
+                        </div>
+
+                        <br>
+                        <br>
+
+                        <div class="form-group search-result-download-option">
+                            <label class="form-text">Excel: </label>
+                            <a href="#" class="search-result-download-link" id="download-excel">Download</a>
+                        </div>
+                        <div class="form-group search-result-download-option">
+                            <label class="form-text">CSV: </label>
+                            <a href="#" class="search-result-download-link" id="download-csv">Download</a>
+                        </div>
+                        <div class="form-group search-result-download-option">
+                            <label class="form-text">Tekstbestand: </label>
+                            <a href="#" class="search-result-download-link" id="download-txt">Download</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 search-result-container">
+                    <div class="search-result-header-container">
+                        <ul class="search-result-unlisted-list">
+                            <li class="search-result-listed-list">
+                                <a href="/noun" class="search-result-navigation-item">Sleutelwoorden</a>
+                            </li>
+
+                            <li class="search-result-listed-list">
+                                <a href="/question" class="search-result-navigation-item">Vraagwoorden</a>
+                            </li>
+
+                            <li class="search-result-listed-list">
+                                <a href="/conjunction" class="search-result-navigation-item search-result-active">Voegwoorden</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="search-result-body-container">
+                        <table class="table" id="table_id">
+                            <thead>
+                                <tr>
+                                    <td>#</td>
+                                    <td>Sleutelwoorden</td>
+                                    <td>Zoek volumes</td>
+                                    <td>CPC</td>
+                                    <td>Competitie</td>
+                                </tr>
+                            </thead>
+
+                            <tbody id="result-table-tbody">
+                                {% for x in words %}
+                                    <tr>
+                                        <td>#</td>
+                                        <td>{{ x["keyword"] }}</td>
+                                        <td>{{ x["search_volume"] }}</td>
+                                        <td>{{ x["cpc"] }}</td>
+                                        <td>{{ x["competition"] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div> 
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap4.min.js"></script>
+        <script src="{{ url_for('static', filename='js/style.js') }}"></script>
+    </body>
+</html>
