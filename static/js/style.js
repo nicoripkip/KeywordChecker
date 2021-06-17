@@ -1,30 +1,34 @@
-let table_data = document.getElementById('result-table-tbody').children;
+//let table_data = document.getElementById('result-table-tbody').children;
 let filter = document.getElementById('filter-word');
+let filter_min = document.getElementById('min_volume');
+let filter_max = document.getElementById('max_volume');
+let header_filter = document.getElementById('header-filter');
+let header_download = document.getElementById('header-download');
 
 
-filter.onchange = () => {
-    data = filter_word(filter.value)
-
-    t = table_data[0].parentNode;
-
-    clear_table();
-
-    for (let i = 0; i < data.length; i++) {
-        t.appendChild(data[i]);
-    }
+if (window.location.pathname == "/") {
+    window.location.reload()
 }
 
 
-function filter_word(word) {
+filter.onkeyup = () => {
+    let table_data = document.getElementById('result-table-tbody').children;
+    console.log(table_data)
+    
+    data = filter_word(filter.value, table_data)
+
+    t = table_data[0].parentNode;
+}
+
+function filter_word(word, table_data) {
     result = [];
 
     for (let i = 0; i < table_data.length; i++) {
-        if (table_data[i].children[1].textContent.includes(word) && word != "") {
+        if (table_data[i].children[1].textContent.replace(" ", "").includes(word)) {
             console.log(table_data[i].children[1].textContent)
-            
-            result.push(table_data[i]);
+            table_data[i].style = "";
         } else {
-            result.push(    [i]);
+            table_data[i].style = "display: none !important";
         }
     }
 
@@ -32,11 +36,37 @@ function filter_word(word) {
 }
 
 
-function clear_table() {
-    let t = table_data[0].parentNode;
+filter_min.onkeyup = () => {
+    let table_data = document.getElementById('result-table-tbody').children;
 
-    while(t.firstChild) {
-        t.removeChild(t.lastChild);
+    for (let i = 0; i < table_data.length; i++) {
+        if (parseFloat(table_data[i].children[2].textContent) < parseFloat(filter_min.value) ) {
+            table_data[i].style = "";
+        } else {
+            console.log("iets")
+            table_data[i].style = "display: none !important";
+        }
+    }
+}
+
+
+filter_max.onkeyup = () => {
+    let table_data = document.getElementById('result-table-tbody').children;
+ 
+    for (let i = 0; i < table_data.length; i++) {
+        if (parseFloat(table_data[i].children[2].textContent) < filter_max.value && table_data[i].style.includes('display: none') != true) {
+            table_data[i].style = "";
+        } else {
+            table_data[i].style = "display: none !important";
+        }
+    }
+}
+
+header_filter.onclick = () => {
+    if (header_filter.parentNode.style.height == '450px') {
+        header_filter.parentNode.style.height = '100px';
+    } else {
+        header_filter.parentNode.style.height = '450px';
     }
 }
 

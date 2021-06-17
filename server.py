@@ -26,6 +26,7 @@ app = Flask(__name__, template_folder="templates")
 app.secret_key = DevelopmentConfig.SECRET_KEY
 GOOGLE_ADS_SERVICE = "GoogleAdsService"
 _DEFAULT_PAGE_SIZE = 1000
+auth = Authentication()
 
 
 #
@@ -69,6 +70,7 @@ def noun_results():
 
     if request.method == "POST":
         words = []
+        session['keyword'] = request.form.get("search")
 
         post_online_data(
             "/v3/keywords_data/google/keywords_for_keywords/task_post",
@@ -127,16 +129,27 @@ def noun_results():
             }
         )
 
-        if len(words) != 0:
-            words = words[0]["tasks"][0]["result"]
+        if auth.get_redirect() < 3:
+            if len(words) != 0:
+                #words = words[0]["tasks"][0]["result"]
+                print(session["keyword"])
+                words = words[0]["tasks"][0]["result"]
+                #words = filter_keyword(words[0]["tasks"][0]["result"], session["keyword"])
 
-            if len(volume) != 0:
-                words.insert(0, volume[0]["tasks"][0]["result"][0])
+                if len(volume) != 0:
+                    words.insert(0, volume[0]["tasks"][0]["result"][0])
+                else:
+                    time.sleep(5)
+                    auth.set_redirect(1)
+                    return redirect("/noun")
             else:
+                time.sleep(5)
+                auth.set_redirect(1)
                 return redirect("/noun")
-            #words = filter_keyword(words[0]["tasks"][0]["result"], request.form.get("search"))
         else:
-            return redirect("/noun")
+            auth.reset_redirect()
+            words = []
+
     else:
         words = []
 
@@ -154,6 +167,42 @@ def noun_results():
 @app.route('/question', methods=['GET', 'POST'])
 def question_results():
     if request.method == "GET":
+        post_online_data(
+            "/v3/keywords_data/google/keywords_for_keywords/task_post",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            },
+            [
+                dict(
+                    language_code=request.form.get("language"),
+                    location_code=2840,
+                    keywords=[
+                        session["keyword"]
+                    ],
+                    pingback_url="http://127.0.0.1:5000/noun"
+                ),
+            ]
+        )
+
+        post_online_data(
+            "/v3/keywords_data/google/search_volume/task_post",
+            {
+                0: CRED_USERNAME,
+                1: CRED_PASSWORD
+            },
+            [
+                dict(
+                    language_code=request.form.get("language"),
+                    location_code=2840,
+                    keywords=[
+                        session["keyword"]
+                    ],
+                    pingback_url="http://127.0.0.1:5000/noun"
+                ),
+            ]
+        )
+        
         words = []
 
         words = get_many_online_data(
@@ -169,6 +218,8 @@ def question_results():
     else:
         words = []
 
+
+    username = ""
     if "username" in session:
         username = session["username"]
 
@@ -225,6 +276,8 @@ def search_volume():
     )
     locations = locations["tasks"][0]["result"]
     
+    username = ""
+
     if "username" in session:
         username = session["username"]
 
@@ -287,6 +340,7 @@ def volumes_result():
         else:
             return redirect("/volumes_result")
 
+    username = ""
 
     if "username" in session:
         username = session["username"]
@@ -388,6 +442,8 @@ def post_online_data(url, credentials, payload=dict()):
     client = RestClient(credentials[0], credentials[1])
     response = client.post(url, payload)
 
+    time.sleep(10)
+
     if response["status_code"] == 20000:
         return response
 
@@ -400,8 +456,10 @@ def post_online_data(url, credentials, payload=dict()):
 def filter_keyword(dataset, keyword):
     array = list()
 
+    #print(dataset)
+
     for x in dataset:
-        if keyword in x["keyword"].strip():
+        if keyword in str(x["keyword"]).strip():
             array.append(x)
 
     return array

@@ -42,7 +42,7 @@
                     <div class="search-result-filter-container">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="search-result-filter-header">
+                                <div class="search-result-filter-header" id="header-filter">
                                     <h2 class="search-result-filter-header-title">Filter</h2>
                                 </div>
 
@@ -59,13 +59,13 @@
                                         <div class="input-group-append">
                                             <label class="input-group-text" id="min-volume-append">MIN</label>
                                         </div>
-                                        <input type="number" name="min_volume" class="search-result-filter-form-volume" aria-describedby="min-volume-append" />
+                                        <input type="text" name="min_volume" id="min_volume" class="search-result-filter-form-volume" aria-describedby="min-volume-append" />
                                     </div>
                                     <div class="input-group search-result-filter-volume-container">
                                         <div class="input-group-append">
                                             <label class="input-group-text" id="max-volume-append">MAX</label>
                                         </div>
-                                        <input type="number" name="min_volume" class="search-result-filter-form-volume" aria-describedby="max-volume-append" />
+                                        <input type="text" name="max_volume" id="max_volume" class="search-result-filter-form-volume" aria-describedby="max-volume-append" />
                                     </div>
                                 </div>
 
@@ -83,7 +83,7 @@
                     </div>
 
                     <div class="search-result-download-container">
-                        <div class="search-result-download-header">
+                        <div class="search-result-download-header" id="header-download">
                             <h2 class="search-result-download-header-title">Download</h2>
                         </div>
 

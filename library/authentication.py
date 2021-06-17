@@ -1,4 +1,6 @@
 from flask import session
+from sqlalchemy.sql.sqltypes import Numeric
+from werkzeug.utils import redirect
 
 
 #
@@ -9,7 +11,7 @@ class Authentication(object):
     # Constructor
     #
     def __init__(self):
-        pass
+        self.redirect = 0
 
 
     #
@@ -31,6 +33,28 @@ class Authentication(object):
             return True
 
         return False
+
+    
+    #
+    # Methode om de redirect te zetten
+    #
+    def set_redirect(self, value):
+        self.redirect = self.redirect + value
+
+
+    #
+    # Methode om de redirect count te stoppen
+    #
+    def reset_redirect(self):
+        self.redirect = 0
+
+
+    #
+    # Methode om de redirect op te halen
+    #
+    # @staticmethod
+    def get_redirect(self) -> int:
+        return self.redirect
 
 
 Authentication.register = staticmethod(Authentication.register)
