@@ -81,7 +81,7 @@ def noun_results():
             [
                 dict(
                     language_code=request.form.get("language"),
-                    location_code=2840,
+                    location_code=2528,
                     keywords=[
                         request.form.get("search")
                     ],
@@ -99,7 +99,7 @@ def noun_results():
             [
                 dict(
                     language_code=request.form.get("language"),
-                    location_code=2840,
+                    location_code=2528,
                     keywords=[
                         request.form.get("search")
                     ],
@@ -176,7 +176,7 @@ def question_results():
             [
                 dict(
                     language_code=request.form.get("language"),
-                    location_code=2840,
+                    location_code=2528,
                     keywords=[
                         session["keyword"]
                     ],
@@ -194,7 +194,7 @@ def question_results():
             [
                 dict(
                     language_code=request.form.get("language"),
-                    location_code=2840,
+                    location_code=2528,
                     keywords=[
                         session["keyword"]
                     ],
@@ -298,7 +298,7 @@ def volumes_result():
             dicts.append(
                 dict(
                     language_code=request.form.get("language"),
-                    location_code=2840,
+                    location_code=2528,
                     keywords=[
                         x
                     ],
@@ -317,7 +317,7 @@ def volumes_result():
             [
                 dict(
                     language_code=request.form.get("language"),
-                    location_code=2840,
+                    location_code=2528,
                     keywords=keywords,
                     pingback_url="http://127.0.0.1:5000/volumes_result"
                 )
@@ -442,7 +442,7 @@ def post_online_data(url, credentials, payload=dict()):
     client = RestClient(credentials[0], credentials[1])
     response = client.post(url, payload)
 
-    time.sleep(10)
+    #time.sleep(10)
 
     if response["status_code"] == 20000:
         return response
